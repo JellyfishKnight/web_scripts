@@ -7,8 +7,6 @@ import routers.detector_param_router as detector_param_router
 
 app = fastapi.FastAPI()
 
-
-
 app.include_router(detector_param_router.router)   
 
 @app.get("/", response_class=fastapi.responses.HTMLResponse)

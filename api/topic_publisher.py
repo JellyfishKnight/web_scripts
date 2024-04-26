@@ -1,5 +1,6 @@
 from rclpy.node import Node
 from std_msgs.msg import String
+from std_msgs.msg import Float32
 
 class PrintPublisher(Node):
     def __init__(self, name: str = "print_publisher"):

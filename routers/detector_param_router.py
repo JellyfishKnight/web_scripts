@@ -1,7 +1,16 @@
 
 import api.topic_publisher as topic_publisher
 import api.param_client as ParamsClient
+import api.topic_subscriber as topic_subscriber
 import rclpy
+import rclpy.executors
+import threading
+
+
+from autoaim_interfaces.msg import Armors
+from std_msgs.msg import Float32
+
+
 
 rclpy.init()
 
@@ -19,10 +28,18 @@ class ParamsGetterController:
         
     # def get_params(self):
     #     return self.params_client.get_params()    
+    
+def callback(msg):
+    pass
+    
+class SubscriptionController:
+    def __init__(self):
+        self.subscription = topic_subscriber.TopicSubscriber(Armors, callback, "/detector/armors")
 
     
 print_controller = PrintController()
 params_getter_controller = ParamsGetterController()
+subscriber_controller = SubscriptionController()
     
 from fastapi import APIRouter
 
@@ -30,6 +47,8 @@ from pydantic import BaseModel
 
 router = APIRouter()
 
+ros_thread = threading.Thread(target=lambda: rclpy.spin(subscriber_controller.subscription), daemon=True)
+ros_thread.start()
 
 class PrintResponse(BaseModel):
     is_blue: int
